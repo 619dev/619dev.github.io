@@ -1,5 +1,6 @@
 # wechat
-
+DOMAIN-SUFFIX,qpic.cn,wechat
+DOMAIN-SUFFIX,servicewechat.com,wechat
 DOMAIN-SUFFIX,wechat.com,wechat
 IP-CIDR,101.32.104.4/32,wechat
 IP-CIDR,101.32.104.41/32,wechat
