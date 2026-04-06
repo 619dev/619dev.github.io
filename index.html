@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PaperPhone - 微信风格端对端加密即时通讯应用 | E2EE IM with WebRTC, PWA, Cloudflare R2">
+    <title>PaperPhone IM | 微信风格 · 端对端加密 · 永久免签</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap');
+        
+        :root {
+            --tw-color-primary: #10b981;
+        }
+        
+        body {
+            font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(16 185 129 / 0.1), 0 8px 10px -6px rgb(16 185 129 / 0.1);
+        }
+        
+        .screenshot {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .screenshot:hover {
+            transform: scale(1.03);
+        }
+        
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .lang-btn {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100">
+    <!-- Navbar -->
+    <nav class="bg-zinc-900 border-b border-zinc-800 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-6 py-5 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-inner">
+                    📄
+                </div>
+                <div>
+                    <span class="text-3xl font-bold tracking-tighter text-white">PaperPhone</span>
+                    <span class="text-emerald-400 text-sm font-medium ml-1 align-super">IM</span>
+                </div>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                <a onclick="navigateToSection('hero')" class="nav-link hover:text-emerald-400 cursor-pointer">首页</a>
+                <a onclick="navigateToSection('features')" class="nav-link hover:text-emerald-400 cursor-pointer">特性</a>
+                <a onclick="navigateToSection('tech')" class="nav-link hover:text-emerald-400 cursor-pointer">技术栈</a>
+                <a onclick="navigateToSection('deploy')" class="nav-link hover:text-emerald-400 cursor-pointer">快速部署</a>
+                <a onclick="navigateToSection('screenshots')" class="nav-link hover:text-emerald-400 cursor-pointer">界面预览</a>
+                <a href="https://github.com/619dev/PaperPhone" target="_blank" class="nav-link hover:text-emerald-400 flex items-center gap-x-1">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="flex items-center gap-x-2">
+                <div onclick="switchLanguage('zh')" id="lang-zh" class="lang-btn flex items-center gap-x-1.5 px-4 py-2 rounded-3xl text-sm font-medium cursor-pointer border border-transparent bg-emerald-500 text-white">
+                    🇨🇳 中文
+                </div>
+                <div onclick="switchLanguage('en')" id="lang-en" class="lang-btn flex items-center gap-x-1.5 px-4 py-2 rounded-3xl text-sm font-medium cursor-pointer border border-zinc-700 hover:border-zinc-400">
+                    🇬🇧 English
+                </div>
+                
+                <!-- Other languages dropdown -->
+                <div class="relative group">
+                    <button onclick="toggleOtherLangs()" class="flex items-center gap-x-1 px-4 py-2 rounded-3xl text-sm font-medium border border-zinc-700 hover:border-zinc-400">
+                        更多语言
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="other-langs-menu" class="hidden group-hover:block absolute right-0 mt-2 w-56 bg-zinc-900 border border-zinc-700 rounded-3xl shadow-2xl py-2 text-sm z-50">
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_JA.md" target="_blank" class="flex items-center gap-x-3 px-6 py-3 hover:bg-zinc-800">🇯🇵 日本語</a>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_KO.md" target="_blank" class="flex items-center gap-x-3 px-6 py-3 hover:bg-zinc-800">🇰🇷 한국어</a>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_FR.md" target="_blank" class="flex items-center gap-x-3 px-6 py-3 hover:bg-zinc-800">🇫🇷 Français</a>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_DE.md" target="_blank" class="flex items-center gap-x-3 px-6 py-3 hover:bg-zinc-800">🇩🇪 Deutsch</a>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_RU.md" target="_blank" class="flex items-center gap-x-3 px-6 py-3 hover:bg-zinc-800">🇷🇺 Русский</a>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_ES.md" target="_blank" class="flex items-center gap-x-3 px-6 py-3 hover:bg-zinc-800">🇪🇸 Español</a>
+                    </div>
+                </div>
+
+                <a href="https://github.com/619dev/PaperPhone" target="_blank" 
+                   class="flex items-center justify-center w-10 h-10 rounded-3xl bg-zinc-800 hover:bg-zinc-700">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero" class="hero-bg py-20 md:py-28 text-white">
+        <div class="max-w-screen-2xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-flex items-center gap-x-2 bg-white/20 backdrop-blur-md px-6 py-2 rounded-3xl text-sm mb-6">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-400"></span>
+                        </span>
+                        已支持 8 种语言 · 零知识 E2EE
+                    </div>
+                    
+                    <h1 id="hero-title" class="text-6xl md:text-7xl font-bold leading-none tracking-tighter mb-6">
+                        PaperPhone IM
+                    </h1>
+                    <p id="hero-subtitle" class="text-2xl md:text-3xl font-medium text-white/90 mb-8 max-w-lg">
+                        微信风格 · 端对端加密即时通讯<br>永久 iOS 免签 · WebRTC 通话 · Cloudflare R2 存储
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="https://github.com/619dev/PaperPhone" target="_blank"
+                           class="inline-flex items-center justify-center bg-white text-emerald-700 hover:bg-white/90 px-8 h-14 rounded-3xl text-lg font-semibold transition-all">
+                            <i class="fab fa-github mr-3"></i>
+                            在 GitHub 免费获取
+                        </a>
+                        
+                        <a onclick="navigateToSection('deploy')" 
+                           class="inline-flex items-center justify-center border border-white/70 hover:border-white px-8 h-14 rounded-3xl text-lg font-semibold transition-all">
+                            一键 Docker 部署
+                        </a>
+                        
+                        <a href="https://zeabur.com/templates/P2J7Y3?referralCode=619dev" target="_blank"
+                           class="inline-flex items-center justify-center bg-[#FF6B00] hover:bg-[#FF6B00]/90 px-8 h-14 rounded-3xl text-lg font-semibold text-white">
+                            Zeabur 云部署
+                            <img src="https://zeabur.com/button.svg" alt="Zeabur" class="ml-3 h-5">
+                        </a>
+                    </div>
+                    
+                    <div class="flex items-center gap-x-8 mt-12 text-sm">
+                        <div class="flex items-center">
+                            <div class="flex -space-x-4">
+                                <div class="w-6 h-6 bg-white/30 rounded-2xl flex items-center justify-center text-xs">🔐</div>
+                                <div class="w-6 h-6 bg-white/30 rounded-2xl flex items-center justify-center text-xs">📹</div>
+                                <div class="w-6 h-6 bg-white/30 rounded-2xl flex items-center justify-center text-xs">👥</div>
+                            </div>
+                            <span id="hero-stat1" class="ml-3">端对端加密 + WebRTC</span>
+                        </div>
+                        <div>⭐ 46 Stars on GitHub</div>
+                        <div class="text-emerald-200">支持 PWA 永久免签</div>
+                    </div>
+                </div>
+                
+                <!-- Hero visual -->
+                <div class="relative hidden md:block">
+                    <div class="bg-white/10 backdrop-blur-3xl border border-white/20 rounded-3xl p-4 shadow-2xl">
+                        <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui1.jpg" 
+                             alt="PaperPhone 聊天界面" 
+                             class="rounded-3xl shadow-2xl w-full aspect-video object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-emerald-400 text-emerald-400 text-xs px-6 py-3 rounded-3xl flex items-center gap-x-2 shadow-xl">
+                        <i class="fas fa-lock"></i>
+                        <span id="hero-badge">逐消息加密 · 前向保密</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-20 bg-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-6">
+            <div class="flex justify-between items-baseline mb-12">
+                <div>
+                    <span class="px-4 py-1 bg-emerald-500/10 text-emerald-400 text-sm font-medium rounded-3xl">全部特性</span>
+                    <h2 id="features-title" class="text-4xl font-bold mt-3">强大功能 · 极致安全</h2>
+                </div>
+                <a href="https://github.com/619dev/PaperPhone" target="_blank" class="text-emerald-400 flex items-center hover:underline">
+                    查看完整文档 <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div id="features-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech" class="py-20 bg-zinc-950 border-t border-b border-zinc-800">
+        <div class="max-w-screen-2xl mx-auto px-6">
+            <h2 id="tech-title" class="text-4xl font-bold text-center mb-12">技术栈</h2>
+            
+            <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+                <!-- Backend -->
+                <div class="bg-zinc-900 rounded-3xl p-8">
+                    <h3 class="text-emerald-400 font-semibold mb-6 flex items-center"><i class="fas fa-server mr-3"></i>后端 (server/)</h3>
+                    <div id="backend-content" class="prose prose-invert text-zinc-300 text-sm leading-relaxed">
+                        <ul class="space-y-4">
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Node.js 20 + Express + WebSocket</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>MySQL 8.0（用户/密文持久化）</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Redis（在线状态 + 多节点路由）</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Cloudflare R2（S3 兼容）</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>JWT + bcrypt 认证</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Frontend -->
+                <div class="bg-zinc-900 rounded-3xl p-8">
+                    <h3 class="text-emerald-400 font-semibold mb-6 flex items-center"><i class="fas fa-mobile-alt mr-3"></i>前端 (client/)</h3>
+                    <div id="frontend-content" class="prose prose-invert text-zinc-300 text-sm leading-relaxed">
+                        <ul class="space-y-4">
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>原生 HTML + Vanilla JS（无构建工具）</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>libsodium-wrappers（WASM Curve25519 / XSalsa20-Poly1305）</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>WebRTC（视频/语音通话）</li>
+                            <li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>PWA（manifest + Service Worker）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Crypto highlight -->
+            <div class="mt-12 text-center max-w-xl mx-auto bg-gradient-to-r from-emerald-500/10 to-transparent border border-emerald-500/30 rounded-3xl p-8">
+                <h3 id="crypto-title" class="font-semibold mb-3 flex items-center justify-center gap-x-2 text-emerald-400">
+                    <i class="fas fa-shield-halved"></i>加密层 · 无状态 ECDH + XSalsa20-Poly1305
+                </h3>
+                <p id="crypto-desc" class="text-zinc-400 text-sm">逐消息临时密钥 · 前向保密<br>私钥四层持久化（内存 → localStorage → sessionStorage → IndexedDB）<br>私钥永不离开设备</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deployment -->
+    <section id="deploy" class="py-20 bg-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-6">
+            <h2 id="deploy-title" class="text-4xl font-bold mb-6 text-center">三种部署方式 · 零配置起步</h2>
+            <p id="deploy-subtitle" class="text-zinc-400 text-center max-w-md mx-auto mb-12">Docker 一键部署 · Zeabur 云部署 · 本地开发</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Zeabur -->
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-8">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest mb-4">方式零 · 推荐</div>
+                    <h3 id="zeabur-title" class="text-2xl font-semibold mb-3">Zeabur 一键云部署</h3>
+                    <p id="zeabur-desc" class="text-zinc-400 mb-8">无需服务器，点击按钮自动创建完整环境</p>
+                    <a href="https://zeabur.com/templates/P2J7Y3?referralCode=619dev" target="_blank" class="block">
+                        <img src="https://zeabur.com/button.svg" alt="Deploy on Zeabur" class="mx-auto">
+                    </a>
+                    <div class="text-xs text-amber-400 mt-6 flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        部署后需手动设置 client 的 SERVER_URL
+                    </div>
+                </div>
+                
+                <!-- Docker -->
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-8">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest mb-4">方式一 · 最简单</div>
+                    <h3 id="docker-title" class="text-2xl font-semibold mb-3">Docker Compose</h3>
+                    <pre id="docker-code" class="bg-zinc-950 text-emerald-300 p-5 rounded-2xl text-xs overflow-auto mb-6 leading-relaxed">git clone https://github.com/619dev/PaperPhone.git
+cd PaperPhone
+cp server/.env.example server/.env
+docker compose up -d</pre>
+                    <p id="docker-desc" class="text-xs text-zinc-400">镜像已发布至 Docker Hub<br>server 首次启动自动创建数据库</p>
+                </div>
+                
+                <!-- Local -->
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-8">
+                    <div class="text-emerald-400 text-xs font-bold tracking-widest mb-4">方式二 · 本地开发</div>
+                    <h3 id="local-title" class="text-2xl font-semibold mb-3">本地手动启动</h3>
+                    <pre id="local-code" class="bg-zinc-950 text-emerald-300 p-5 rounded-2xl text-xs overflow-auto mb-6 leading-relaxed">cd server
+npm install &amp;&amp; npm run dev
+
+# 前端
+npx serve client -p 8080</pre>
+                    <p id="local-desc" class="text-xs text-zinc-400">支持热重载 · 适合二次开发</p>
+                </div>
+            </div>
+            
+            <div class="text-center text-xs text-zinc-500 mt-16">
+                支持多节点 Redis + MySQL · Cloudflare TURN 已内置
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section id="screenshots" class="py-20 bg-zinc-950">
+        <div class="max-w-screen-2xl mx-auto px-6">
+            <h2 id="screenshots-title" class="text-4xl font-bold text-center mb-4">界面预览</h2>
+            <p id="screenshots-subtitle" class="text-zinc-400 text-center mb-12">微信风格聊天 · 朋友圈 · 时间线 · 群聊 · 通话</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui1.jpg" alt="UI 1" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui2.jpg" alt="UI 2" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui3.jpg" alt="UI 3" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui4.jpg" alt="UI 4" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui5.jpg" alt="UI 5" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui6.jpg" alt="UI 6" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui7.jpg" alt="UI 7" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui8.jpg" alt="UI 8" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui9.jpg" alt="UI 9" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui10.jpg" alt="UI 10" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui11.jpg" alt="UI 11" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui12.jpg" alt="UI 12" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui13.jpg" alt="UI 13" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+                <img src="https://raw.githubusercontent.com/619dev/PaperPhone/main/ui14.jpg" alt="UI 14" class="screenshot rounded-3xl shadow-xl border border-white/10 w-full">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / More info -->
+    <footer class="bg-black py-16 border-t border-zinc-800">
+        <div class="max-w-screen-2xl mx-auto px-6 text-zinc-400 text-sm">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-y-8">
+                <div>
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <span class="text-3xl">📄</span>
+                        <span class="font-bold text-xl text-white">PaperPhone IM</span>
+                    </div>
+                    <p id="footer-desc">融合 BoxIM 架构与 SimpleX Chat 安全模型<br>自托管 · 零知识 · 多语言 · PWA</p>
+                    <div class="mt-6 text-xs">© 2026 619dev · 完全开源 · MIT License</div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-x-12">
+                    <div>
+                        <h4 class="font-semibold text-white mb-3">文档</h4>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README.md" target="_blank" class="block hover:text-white py-1">中文 README</a>
+                        <a href="https://github.com/619dev/PaperPhone/blob/main/README_EN.md" target="_blank" class="block hover:text-white py-1">English README</a>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-white mb-3">快速链接</h4>
+                        <a href="https://github.com/619dev/PaperPhone" target="_blank" class="block hover:text-white py-1">GitHub 仓库</a>
+                        <a href="https://zeabur.com/templates/P2J7Y3?referralCode=619dev" target="_blank" class="block hover:text-white py-1">Zeabur 模板</a>
+                        <a href="https://github.com/619dev/PaperPhone/tree/main/client" target="_blank" class="block hover:text-white py-1">前端源码</a>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-white mb-3">安全特性</h4>
+                        <div class="space-y-1 text-xs">
+                            <div>✅ 端到端加密</div>
+                            <div>✅ 零知识服务器</div>
+                            <div>✅ 前向保密</div>
+                            <div>✅ 2FA + TOTP</div>
+                            <div>✅ Web Push + OneSignal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16 text-xs opacity-50">
+                本静态页面由 Grok 根据 https://github.com/619dev/PaperPhone 官方文档自动生成<br>
+                可直接部署到 Vercel · 切换语言 · 完整介绍所有功能
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind script initialization
+        function initializeTailwind() {
+            tailwind.config = {
+                content: [],
+                theme: {
+                    extend: {}
+                }
+            }
+        }
+        
+        // Language data
+        const languages = {
+            zh: {
+                heroTitle: "PaperPhone IM",
+                heroSubtitle: "微信风格 · 端对端加密即时通讯<br>永久 iOS 免签 · WebRTC 通话 · Cloudflare R2 存储",
+                heroBadge: "逐消息加密 · 前向保密",
+                heroStat1: "端对端加密 + WebRTC",
+                
+                featuresTitle: "强大功能 · 极致安全",
+                features: [
+                    { icon: "🔐", title: "端对端加密", desc: "无状态 ECDH + XSalsa20-Poly1305，逐消息临时密钥，前向保密" },
+                    { icon: "🗝️", title: "零知识服务器", desc: "服务器只存储密文，私钥仅在设备本地（四层持久化）" },
+                    { icon: "📹", title: "视频/语音通话", desc: "WebRTC P2P（1:1）+ Mesh（多人），Cloudflare TURN 穿透" },
+                    { icon: "👥", title: "群聊", desc: "最多 2000 人群组，纯文本消息，免打扰模式，成员管理" },
+                    { icon: "⏱️", title: "消息自动删除", desc: "5 档可选（永不/1天/3天/1周/1月），私聊双方均可设置" },
+                    { icon: "🔔", title: "消息推送", desc: "Web Push (VAPID) + OneSignal 双通道，离线也能收到通知" },
+                    { icon: "🌐", title: "多语言", desc: "中文、英文、日语、韩语、法语、德语、俄语、西班牙语" },
+                    { icon: "📱", title: "iOS 永久免签", desc: "PWA H5 → Safari「添加到主屏幕」，无需企业证书" },
+                    { icon: "💬", title: "丰富消息", desc: "文字/图片/视频/文档/语音/Emoji/Telegram 贴纸/已读状态" },
+                    { icon: "🌐", title: "朋友圈", desc: "文字+最多9张图或1个视频，点赞、评论、标签可见性" },
+                    { icon: "👤", title: "个人资料", desc: "双向朋友圈隐私控制，支持不看/不让他看" },
+                    { icon: "📰", title: "时间线", desc: "小红书风格公开发帖，双列瀑布流，支持匿名发帖" },
+                    { icon: "🏷️", title: "好友标签", desc: "12色调色板，按标签筛选通讯录" },
+                    { icon: "🗂️", title: "R2 对象存储", desc: "Cloudflare R2 存储图片/语音，可选公开 CDN" },
+                    { icon: "🔑", title: "两步验证", desc: "Google Authenticator TOTP + 8个恢复码" },
+                    { icon: "📷", title: "扫码加好友", desc: "二维码添加好友/入群，可设置有效期" },
+                    { icon: "🏗️", title: "可自托管", desc: "Docker Compose 一键部署，支持多节点" }
+                ],
+                
+                techTitle: "技术栈",
+                backendContent: `<ul class="space-y-4"><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Node.js 20 + Express + ws</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>MySQL 8.0 — 用户/消息持久化</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Redis — 在线状态 + 跨节点路由</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Cloudflare R2 — 图片/语音文件存储</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>JWT + bcrypt 认证</li></ul>`,
+                frontendContent: `<ul class="space-y-4"><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>原生 HTML + Vanilla JS (ESM，无打包工具)</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>libsodium-wrappers (WebAssembly)</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>WebRTC API — 视频/语音通话</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>PWA: manifest.json + Service Worker</li></ul>`,
+                cryptoTitle: "加密层 · 无状态 ECDH + XSalsa20-Poly1305",
+                cryptoDesc: "逐消息临时密钥 · 前向保密<br>私钥四层持久化 · 私钥全程本地存储",
+                
+                deployTitle: "三种部署方式 · 零配置起步",
+                deploySubtitle: "Docker 一键部署 · Zeabur 云部署 · 本地开发",
+                zeaburTitle: "Zeabur 一键云部署",
+                zeaburDesc: "无需服务器，点击按钮自动创建完整环境",
+                dockerTitle: "Docker Compose",
+                dockerDesc: "镜像已发布至 Docker Hub<br>server 首次启动自动创建数据库",
+                dockerCode: `git clone https://github.com/619dev/PaperPhone.git
+cd PaperPhone
+cp server/.env.example server/.env
+docker compose up -d`,
+                localTitle: "本地手动启动",
+                localDesc: "支持热重载 · 适合二次开发",
+                localCode: `cd server
+npm install && npm run dev
+
+# 前端
+npx serve client -p 8080`,
+                
+                screenshotsTitle: "界面预览",
+                screenshotsSubtitle: "微信风格聊天 · 朋友圈 · 时间线 · 群聊 · 通话",
+                
+                footerDesc: "融合 BoxIM 架构与 SimpleX Chat 安全模型<br>自托管 · 零知识 · 多语言 · PWA"
+            },
+            en: {
+                heroTitle: "PaperPhone IM",
+                heroSubtitle: "WeChat-style · End-to-End Encrypted Instant Messaging<br>iOS PWA Forever · WebRTC Calls · Cloudflare R2 Storage",
+                heroBadge: "Per-message encryption · Forward secrecy",
+                heroStat1: "E2EE + WebRTC",
+                
+                featuresTitle: "Powerful Features · Ultimate Security",
+                features: [
+                    { icon: "🔐", title: "End-to-End Encryption", desc: "Stateless ECDH + XSalsa20-Poly1305 — ephemeral keys per message, forward secrecy" },
+                    { icon: "🗝️", title: "Zero-Knowledge Server", desc: "Server stores only ciphertext; private keys stay on device (4-tier persistence)" },
+                    { icon: "📹", title: "Video & Voice Calls", desc: "WebRTC P2P (1:1) + Mesh (group), Cloudflare TURN NAT traversal" },
+                    { icon: "👥", title: "Group Chat", desc: "Up to 2000 members, plain-text, DND mode, member management" },
+                    { icon: "⏱️", title: "Auto-Delete Messages", desc: "5 tiers (never/1d/3d/1w/1m), set by either party in DMs" },
+                    { icon: "🔔", title: "Push Notifications", desc: "Web Push (VAPID) + OneSignal dual-channel — offline delivery" },
+                    { icon: "🌐", title: "Multi-Language", desc: "Chinese, English, Japanese, Korean, French, German, Russian, Spanish" },
+                    { icon: "📱", title: "iOS No Enterprise Cert", desc: "PWA → Safari \"Add to Home Screen\" forever" },
+                    { icon: "💬", title: "Rich Messaging", desc: "Text, images, video, documents, voice, 200+ emojis, Telegram stickers, read receipts" },
+                    { icon: "🌐", title: "Moments", desc: "Text + up to 9 photos or 1 video, likes, comments, tag visibility" },
+                    { icon: "👤", title: "User Profile", desc: "Bidirectional Moments privacy controls" },
+                    { icon: "📰", title: "Timeline", desc: "Xiaohongshu-style public feed, masonry layout, anonymous posting" },
+                    { icon: "🏷️", title: "Friend Tags", desc: "12-color palette, filter contacts by tags" },
+                    { icon: "🗂️", title: "R2 Object Storage", desc: "Cloudflare R2 for images/voice, optional public CDN" },
+                    { icon: "🔑", title: "Two-Factor Auth", desc: "TOTP + 8 recovery codes, enforced at login" },
+                    { icon: "📷", title: "QR Scan", desc: "Add friends / join groups with expiring QR codes" },
+                    { icon: "🏗️", title: "Self-Hostable", desc: "Docker Compose one-click, multi-node ready" }
+                ],
+                
+                techTitle: "Tech Stack",
+                backendContent: `<ul class="space-y-4"><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Node.js 20 + Express + ws</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>MySQL 8.0 — users &amp; ciphertext</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Redis — presence + routing</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Cloudflare R2 — S3 compatible</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>JWT + bcrypt auth</li></ul>`,
+                frontendContent: `<ul class="space-y-4"><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>Native HTML + Vanilla JS (ESM)</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>libsodium-wrappers WASM</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>WebRTC for calls</li><li class="flex items-start"><span class="text-emerald-400 mr-2">•</span>PWA ready</li></ul>`,
+                cryptoTitle: "Cryptography · Stateless ECDH + XSalsa20-Poly1305",
+                cryptoDesc: "Ephemeral keys per message · Forward secrecy<br>4-tier persistence on device only",
+                
+                deployTitle: "Three Easy Deployment Options",
+                deploySubtitle: "Docker · Zeabur · Local development",
+                zeaburTitle: "Zeabur One-Click Deploy",
+                zeaburDesc: "No server needed — instant full environment",
+                dockerTitle: "Docker Compose",
+                dockerDesc: "Official images on Docker Hub<br>Auto schema on first run",
+                dockerCode: `git clone https://github.com/619dev/PaperPhone.git
+cd PaperPhone
+cp server/.env.example server/.env
+docker compose up -d`,
+                localTitle: "Local Development",
+                localDesc: "Hot reload ready for customization",
+                localCode: `cd server
+npm install && npm run dev
+
+# Frontend
+npx serve client -p 8080`,
+                
+                screenshotsTitle: "Screenshots",
+                screenshotsSubtitle: "WeChat-style chat · Moments · Timeline · Group · Calls",
+                
+                footerDesc: "Combines BoxIM architecture with SimpleX Chat security model<br>Self-hostable · Zero-knowledge · Multi-language · PWA"
+            }
+        }
+        
+        let currentLang = 'zh'
+        
+        // Render features
+        function renderFeatures(lang) {
+            const container = document.getElementById('features-grid')
+            container.innerHTML = ''
+            
+            languages[lang].features.forEach(feature => {
+                const card = document.createElement('div')
+                card.className = 'feature-card bg-zinc-900 rounded-3xl p-6 border border-white/10 hover:border-emerald-400/30'
+                card.innerHTML = `
+                    <div class="text-4xl mb-6">${feature.icon}</div>
+                    <h4 class="font-semibold text-xl mb-2">${feature.title}</h4>
+                    <p class="text-zinc-400 text-sm leading-relaxed">${feature.desc}</p>
+                `
+                container.appendChild(card)
+            })
+        }
+        
+        // Switch language
+        function switchLanguage(lang) {
+            if (currentLang === lang) return
+            currentLang = lang
+            
+            // Update active button
+            document.getElementById('lang-zh').classList.toggle('bg-emerald-500', lang === 'zh')
+            document.getElementById('lang-zh').classList.toggle('text-white', lang === 'zh')
+            document.getElementById('lang-zh').classList.toggle('border-transparent', lang === 'zh')
+            document.getElementById('lang-en').classList.toggle('bg-emerald-500', lang === 'en')
+            document.getElementById('lang-en').classList.toggle('text-white', lang === 'en')
+            document.getElementById('lang-en').classList.toggle('border-transparent', lang === 'en')
+            
+            // Update all texts
+            const data = languages[lang]
+            
+            document.getElementById('hero-title').innerHTML = data.heroTitle
+            document.getElementById('hero-subtitle').innerHTML = data.heroSubtitle
+            document.getElementById('hero-badge').innerHTML = data.heroBadge
+            document.getElementById('hero-stat1').innerHTML = data.heroStat1
+            
+            document.getElementById('features-title').innerHTML = data.featuresTitle
+            renderFeatures(lang)
+            
+            document.getElementById('tech-title').innerHTML = data.techTitle
+            document.getElementById('backend-content').innerHTML = data.backendContent
+            document.getElementById('frontend-content').innerHTML = data.frontendContent
+            document.getElementById('crypto-title').innerHTML = `<i class="fas fa-shield-halved"></i> ${data.cryptoTitle}`
+            document.getElementById('crypto-desc').innerHTML = data.cryptoDesc
+            
+            document.getElementById('deploy-title').innerHTML = data.deployTitle
+            document.getElementById('deploy-subtitle').innerHTML = data.deploySubtitle
+            document.getElementById('zeabur-title').innerHTML = data.zeaburTitle
+            document.getElementById('zeabur-desc').innerHTML = data.zeaburDesc
+            document.getElementById('docker-title').innerHTML = data.dockerTitle
+            document.getElementById('docker-desc').innerHTML = data.dockerDesc
+            document.getElementById('docker-code').innerHTML = data.dockerCode.replace(/\n/g, '<br>')
+            document.getElementById('local-title').innerHTML = data.localTitle
+            document.getElementById('local-desc').innerHTML = data.localDesc
+            document.getElementById('local-code').innerHTML = data.localCode.replace(/\n/g, '<br>')
+            
+            document.getElementById('screenshots-title').innerHTML = data.screenshotsTitle
+            document.getElementById('screenshots-subtitle').innerHTML = data.screenshotsSubtitle
+            
+            document.getElementById('footer-desc').innerHTML = data.footerDesc
+            
+            // Update HTML lang
+            document.documentElement.lang = lang === 'zh' ? 'zh' : 'en'
+        }
+        
+        // Toggle other languages menu
+        function toggleOtherLangs() {
+            const menu = document.getElementById('other-langs-menu')
+            menu.classList.toggle('hidden')
+        }
+        
+        // Simple section navigation
+        function navigateToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' })
+        }
+        
+        // Main initialization
+        function init() {
+            initializeTailwind()
+            renderFeatures('zh')
+            
+            // Close other languages menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const menu = document.getElementById('other-langs-menu')
+                if (!e.target.closest('.relative')) {
+                    menu.classList.add('hidden')
+                }
+            })
+            
+            console.log('%c✅ PaperPhone 静态页面生成成功！\n直接部署到 Vercel 即可使用，支持中文/英文切换 + 全部功能介绍', 'color:#10b981; font-size:13px')
+        }
+        
+        window.onload = init
+    </script>
+</body>
+</html>
