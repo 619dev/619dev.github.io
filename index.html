@@ -188,7 +188,17 @@
                 <!-- Docker -->
                 <div class="bg-white border border-zinc-200 rounded-3xl p-8 hover:border-emerald-300 transition-colors">
                     <h3 id="docker-title" class="text-2xl font-semibold mb-3">Docker Compose</h3>
-                    <pre id="docker-code" class="bg-zinc-950 text-emerald-300 p-6 rounded-2xl text-sm overflow-auto mb-6"></pre>
+                    <pre id="docker-code" class="bg-zinc-950 text-emerald-300 p-6 rounded-2xl text-sm overflow-auto mb-6">
+                        # 克隆仓库
+git clone <repo-url> && cd paperphone-plus
+
+# 复制并编辑环境变量
+cp server/.env.example server/.env
+# 按需编辑：DB_PASS / JWT_SECRET / CF_CALLS_APP_ID 等
+
+# 一键启动（含前端、后端、MySQL、Redis）
+docker compose up -d
+                    </pre>
                     <p id="docker-desc" class="text-sm text-zinc-500">适合自有服务器</p>
                 </div>
                 
