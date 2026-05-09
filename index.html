@@ -1,368 +1,309 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PaperPhone Plus - 微信风格 · React + Rust 重构 · 端对端加密即时通讯">
     <title>PaperPhone Plus | 微信风格 · React + Rust · 端对端加密 IM</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="微信风格的端对端加密即时通讯应用。React + Rust 重构，支持代理访问、Google Play 原生 App、iOS 永久免签、视频通话、变声等强大功能。">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap');
-        
+        :root {
+            --primary: #07c160;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
-        
-        .hero-bg {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+            background: white;
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            margin: 0.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(7, 193, 96, 0.3);
+        }
+        .btn-outline {
+            border: 2px solid #333;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
         .feature-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
         }
-        
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgb(16 185 129 / 0.25);
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
-        
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 4rem 0;
+        }
         .screenshot {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
-        
-        .screenshot:hover {
-            transform: scale(1.05);
-            box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.2);
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #222;
+            color: #ddd;
+            margin-top: 4rem;
         }
+        .google-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 1rem;
+        }
+        .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.screenshot {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid #eee;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+}
+
+.screenshot:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(7, 193, 96, 0.18);
+    border-color: #07c160;
+}
+
+@media (max-width: 640px) {
+    .screenshots-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.2rem;
+    }
+    .screenshot {
+        border-radius: 16px;
+    }
+}
     </style>
+    
 </head>
-<body class="bg-zinc-50 text-zinc-900">
-
-    <!-- Navbar -->
-    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
-        <div class="max-w-screen-2xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div class="flex items-center gap-x-3">
-                <div class="w-10 h-10 bg-emerald-500 rounded-3xl flex items-center justify-center text-white text-3xl shadow">
-                    📄
-                </div>
-                <div>
-                    <span class="text-3xl font-bold tracking-tighter">PaperPhone</span>
-                    <span class="text-emerald-600 text-sm font-medium ml-1">Plus</span>
-                </div>
-            </div>
-
-            <div class="hidden md:flex items-center gap-x-8 text-sm font-medium text-zinc-700">
-                <a onclick="navigateToSection('hero')" class="nav-link hover:text-emerald-600 cursor-pointer">首页</a>
-                <a onclick="navigateToSection('features')" class="nav-link hover:text-emerald-600 cursor-pointer">特性</a>
-                <a onclick="navigateToSection('tech')" class="nav-link hover:text-emerald-600 cursor-pointer">技术栈</a>
-                <a onclick="navigateToSection('deploy')" class="nav-link hover:text-emerald-600 cursor-pointer">部署</a>
-                <a onclick="navigateToSection('screenshots')" class="nav-link hover:text-emerald-600 cursor-pointer">界面预览</a>
-                <a href="https://github.com/619dev/Paperphone-plus" target="_blank" class="nav-link hover:text-emerald-600 flex items-center gap-x-1">
+<body>
+    <header>
+        <nav>
+            <div class="logo">PaperPhone Plus</div>
+            <div>
+                <a href="https://github.com/619dev/Paperphone-plus" target="_blank" class="btn btn-outline" style="margin-right: 10px;">
                     <i class="fab fa-github"></i> GitHub
                 </a>
             </div>
+        </nav>
+    </header>
 
-            <div class="flex items-center gap-x-3">
-                <div onclick="switchLanguage('zh')" id="lang-zh" 
-                     class="lang-btn flex items-center gap-x-2 px-5 py-2 rounded-3xl text-sm font-medium cursor-pointer bg-emerald-600 text-white">
-                    🇨🇳 中文
+    <section class="hero">
+        <h1>PaperPhone Plus</h1>
+        <p class="subtitle">微信风格 · React + Rust 重构 · 端到端加密 IM</p>
+        <p style="font-size: 1.3rem; margin: 1.5rem 0; color: #07c160;">
+            <strong>新增</strong>：代理访问网络支持 + Google Play 原生 App
+        </p>
+        
+        <div class="badges">
+            <a href="https://play.google.com/store/apps/details?id=com.fm619.paperphoneplus" target="_blank" class="google-play">
+                <i class="fab fa-google-play" style="font-size: 1.8rem;"></i>
+                <div>
+                    <small>GET IT ON</small><br>
+                    <strong>Google Play</strong>
                 </div>
-                <div onclick="switchLanguage('en')" id="lang-en" 
-                     class="lang-btn flex items-center gap-x-2 px-5 py-2 rounded-3xl text-sm font-medium cursor-pointer border border-zinc-300 hover:border-zinc-400">
-                    🇬🇧 English
+            </a>
+        </div>
+
+        <div>
+            <a href="https://github.com/619dev/Paperphone-plus" target="_blank" class="btn btn-primary">
+                <i class="fab fa-github"></i> 查看开源代码
+            </a>
+            <a href="#features" class="btn btn-outline">了解特性</a>
+        </div>
+
+        <p style="margin-top: 2rem; color: #666;">
+            iOS 永久免签 PWA · 支持 SOCKS5 / HTTP 代理 · 抗量子加密
+        </p>
+    </section>
+
+    <div class="container">
+        <section id="features">
+            <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.2rem;">核心特性</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-lock"></i>
+                    <h3>端到端加密</h3>
+                    <p>无状态 ECDH + XSalsa20-Poly1305 逐消息加密，前向保密，私钥永不离开设备。</p>
                 </div>
-                <a href="https://github.com/619dev/Paperphone-plus" target="_blank" 
-                   class="w-10 h-10 flex items-center justify-center text-xl text-zinc-700 hover:text-emerald-600 rounded-3xl border border-zinc-200 hover:border-emerald-200">
-                    <i class="fab fa-github"></i>
+                <div class="feature-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>代理访问</h3>
+                    <p><strong>新增</strong> 支持 SOCKS5 / HTTP / HTTPS 代理，在登录页和设置页轻松配置，突破网络限制。</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fab fa-google-play"></i>
+                    <h3>Android 原生 App</h3>
+                    <p><strong>新增</strong> 已上架 Google Play，支持 FCM 推送通知，体验更原生。</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-video"></i>
+                    <h3>视频/语音通话</h3>
+                    <p>WebRTC P2P + Mesh 多人通话，支持 Cloudflare TURN 穿透。</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-microphone"></i>
+                    <h3>实时变声</h3>
+                    <p>语音消息与通话均支持 3 档变声（低沉 / 正常 / 尖锐）。</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>丰富社交</h3>
+                    <p>好友审核、群聊（最高2000人）、朋友圈、时间线、标签分组等。</p>
+                </div>
+            </div>
+        </section>
+<!-- ==================== 界面预览 ==================== -->
+<section id="screenshots" style="padding: 5rem 2rem; background: #f8f9fa;">
+    <div class="container">
+        <h2 style="text-align: center; font-size: 2.4rem; margin-bottom: 1rem; color: #222;">
+            界面预览
+        </h2>
+        <p style="text-align: center; font-size: 1.25rem; color: #666; max-width: 600px; margin: 0 auto 3rem;">
+            全新 React 界面 · 极致接近原生微信体验
+        </p>
+
+        <div class="screenshots-grid">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui1.jpg" alt="聊天界面" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui2.jpg" alt="联系人" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui3.jpg" alt="朋友圈" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui4.jpg" alt="视频通话" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui5.jpg" alt="设置" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui6.jpg" alt="群聊" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui7.jpg" alt="变声" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui8.jpg" alt="个人中心" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui9.jpg" alt="ui9" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui10.jpg" alt="ui10" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui11.jpg" alt="ui11" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui12.jpg" alt="ui12" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui13.jpg" alt="ui13" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui14.jpg" alt="ui14" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui15.jpg" alt="ui15" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui16.jpg" alt="ui16" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui17.jpg" alt="ui17" class="screenshot">
+            <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui18.jpg" alt="ui18" class="screenshot">
+        </div>
+    </div>
+</section>
+
+        <section style="background: white; padding: 3rem; border-radius: 16px; margin: 4rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center;">部署方式</h2>
+            <ul style="max-width: 700px; margin: 2rem auto; font-size: 1.1rem;">
+                <li><strong>Zeabur 一键部署</strong> —— 最推荐，几秒完成</li>
+                <li><strong>Docker Compose</strong> —— 自有服务器一键启动</li>
+                <li><strong>Vercel</strong> —— 前端独立部署（全球 CDN 加速）</li>
+            </ul>
+            <div style="text-align: center;">
+                <a href="https://github.com/619dev/Paperphone-plus" target="_blank" class="btn btn-primary" style="font-size: 1.1rem;">
+                    查看完整部署文档 →
                 </a>
             </div>
-        </div>
-    </nav>
+        </section>
+    </div>
 
-    <!-- Hero -->
-    <section id="hero" class="hero-bg py-24 text-white">
-        <div class="max-w-screen-2xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-flex items-center bg-white/20 backdrop-blur-md px-5 py-2 rounded-3xl text-sm mb-6">
-                        <span class="relative flex h-3 w-3 mr-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-                        </span>
-                        React + Rust 重构 · 抗量子加密
-                    </div>
-                    
-                    <h1 id="hero-title" class="text-6xl md:text-7xl font-bold leading-none tracking-tighter mb-6">
-                        PaperPhone Plus
-                    </h1>
-                    <p id="hero-subtitle" class="text-2xl md:text-3xl font-medium text-white/90 mb-10">
-                        微信风格 · React + Rust 重构<br>
-                        端到端加密 · 前向保密 · iOS 永久免签
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://github.com/619dev/Paperphone-plus" target="_blank"
-                           class="inline-flex items-center justify-center bg-white text-emerald-700 hover:bg-white/95 px-10 h-14 rounded-3xl text-lg font-semibold shadow-lg">
-                            <i class="fab fa-github mr-3"></i>
-                            GitHub 开源
-                        </a>
-                        <a onclick="navigateToSection('deploy')" 
-                           class="inline-flex items-center justify-center bg-transparent border-2 border-white/80 hover:border-white px-10 h-14 rounded-3xl text-lg font-semibold">
-                            查看部署方式
-                        </a>
-                    </div>
-                    
-                    <div class="mt-12 flex items-center gap-x-10 text-sm">
-                        <div>🔒 端到端 + 前向保密</div>
-                        <div>⚡ React + Rust 性能</div>
-                        <div>🌍 8 语言支持</div>
-                    </div>
-                </div>
-                
-                <div class="relative hidden md:block">
-                    <div class="bg-white/10 backdrop-blur-3xl border border-white/30 rounded-3xl p-4 shadow-2xl">
-                        <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui1.jpg" 
-                             alt="PaperPhone Plus 聊天界面" 
-                             class="rounded-3xl shadow-2xl w-full">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section id="features" class="py-20 bg-white">
-        <div class="max-w-screen-2xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="px-6 py-2 bg-emerald-100 text-emerald-700 rounded-3xl text-sm font-medium">全新重构</span>
-                <h2 id="features-title" class="text-5xl font-bold mt-4">更安全 · 更丝滑 · 更强大</h2>
-            </div>
-            
-            <div id="features-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- JS 动态生成 -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech Stack -->
-    <section id="tech" class="py-20 bg-zinc-100">
-        <div class="max-w-screen-2xl mx-auto px-6">
-            <h2 id="tech-title" class="text-5xl font-bold text-center mb-12">技术架构</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div class="bg-white rounded-3xl p-8 shadow">
-                    <h3 class="text-emerald-600 font-semibold mb-6 flex items-center text-xl">
-                        <i class="fas fa-server mr-3"></i>后端 (Rust)
-                    </h3>
-                    <div id="backend-content" class="text-zinc-600 space-y-4"></div>
-                </div>
-                
-                <div class="bg-white rounded-3xl p-8 shadow">
-                    <h3 class="text-emerald-600 font-semibold mb-6 flex items-center text-xl">
-                        <i class="fas fa-mobile-alt mr-3"></i>前端 (React)
-                    </h3>
-                    <div id="frontend-content" class="text-zinc-600 space-y-4"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Deployment -->
-    <section id="deploy" class="py-20 bg-white">
-        <div class="max-w-screen-2xl mx-auto px-6">
-            <h2 id="deploy-title" class="text-5xl font-bold text-center mb-4">部署方式</h2>
-            <p id="deploy-subtitle" class="text-zinc-500 text-center text-xl mb-12">一键部署 · 前端支持 Vercel</p>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Zeabur -->
-                <div class="bg-white border border-zinc-200 rounded-3xl p-8 hover:border-emerald-300 transition-colors">
-                    <div class="text-emerald-600 font-bold mb-2">强烈推荐</div>
-                    <h3 id="zeabur-title" class="text-2xl font-semibold mb-3">Zeabur 一键云部署</h3>
-                    <p id="zeabur-desc" class="text-zinc-600 mb-8">无需服务器，几秒完成完整部署</p>
-                    <a href="https://zeabur.com/templates/SK6T93?referralCode=619dev" target="_blank">
-                        <img src="https://zeabur.com/button.svg" alt="Deploy on Zeabur" class="mx-auto">
-                    </a>
-                </div>
-                
-                <!-- Docker -->
-                <div class="bg-white border border-zinc-200 rounded-3xl p-8 hover:border-emerald-300 transition-colors">
-                    <h3 id="docker-title" class="text-2xl font-semibold mb-3">Docker Compose</h3>
-                    <pre id="docker-code" class="bg-zinc-950 text-emerald-300 p-6 rounded-2xl text-sm overflow-auto mb-6">
-# 克隆仓库
-git clone <repo-url> && cd paperphone-plus
-
-# 复制并编辑环境变量
-cp server/.env.example server/.env
-# 按需编辑：DB_PASS / JWT_SECRET / CF_CALLS_APP_ID 等
-
-# 一键启动（含前端、后端、MySQL、Redis）
-docker compose up -d
-                    </pre>
-                    <p id="docker-desc" class="text-sm text-zinc-500">适合自有服务器</p>
-                </div>
-                
-                <!-- Vercel -->
-                <div class="bg-white border border-zinc-200 rounded-3xl p-8 hover:border-emerald-300 transition-colors">
-                    <h3 id="vercel-title" class="text-2xl font-semibold mb-3">前端 Vercel 部署</h3>
-                    <p id="vercel-desc" class="text-zinc-600 mb-6">React 前端可独立部署到 Vercel</p>
-                    <a href="https://github.com/619dev/Paperphone-plus/tree/main/client" target="_blank" 
-                       class="text-emerald-600 hover:underline">查看 client 目录 →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Screenshots -->
-    <section id="screenshots" class="py-20 bg-zinc-100">
-        <div class="max-w-screen-2xl mx-auto px-6">
-            <h2 id="screenshots-title" class="text-5xl font-bold text-center mb-3">界面预览</h2>
-            <p id="screenshots-subtitle" class="text-zinc-500 text-center text-xl mb-12">全新 React UI · 更接近原生微信体验</p>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                <!-- 可替换为实际截图链接 -->
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui1.jpg" alt="ui1" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui2.jpg" alt="ui2" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui3.jpg" alt="ui3" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui4.jpg" alt="ui4" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui5.jpg" alt="ui5" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui6.jpg" alt="ui6" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui7.jpg" alt="ui7" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui8.jpg" alt="ui8" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui9.jpg" alt="ui9" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui10.jpg" alt="ui10" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui11.jpg" alt="ui11" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui12.jpg" alt="ui12" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui13.jpg" alt="ui13" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui14.jpg" alt="ui14" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui15.jpg" alt="ui15" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui16.jpg" alt="ui16" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui17.jpg" alt="ui17" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-                <img src="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/screenshot/ui18.jpg" alt="ui18" class="screenshot rounded-3xl shadow-lg border border-zinc-200 w-full">
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-zinc-900 text-zinc-300 py-16">
-        <div class="max-w-screen-2xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-y-10">
-                <div>
-                    <div class="flex items-center gap-x-3 mb-4">
-                        <span class="text-4xl">📄</span>
-                        <span class="font-bold text-3xl text-white">PaperPhone Plus</span>
-                    </div>
-                    <p id="footer-desc" class="max-w-md text-zinc-400">React + Rust 重构的微信风格端对端加密即时通讯应用</p>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-x-16">
-                    <div>
-                        <h4 class="font-semibold text-white mb-4">文档</h4>
-                        <a href="https://github.com/619dev/Paperphone-plus/blob/main/README.md" target="_blank" class="block hover:text-white py-1">中文文档</a>
-                        <a href="https://github.com/619dev/Paperphone-plus/blob/main/README_EN.md" target="_blank" class="block hover:text-white py-1">English</a>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-white mb-4">链接</h4>
-                        <a href="https://github.com/619dev/Paperphone-plus" target="_blank" class="block hover:text-white py-1">GitHub</a>
-                        <a href="https://zeabur.com/templates/SK6T93?referralCode=619dev" target="_blank" class="block hover:text-white py-1">Zeabur</a>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-white mb-4">安全</h4>
-                        <div class="space-y-1 text-sm">
-                            <div>✅ 端到端加密</div>
-                            <div>✅ 前向保密</div>
-                            <div>✅ 零知识架构</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <footer>
+        <p>&copy; 2026 PaperPhone Plus</p>
+        <p>
+            <a href="https://github.com/619dev/Paperphone-plus" target="_blank" style="color: #07c160; margin: 0 15px;">GitHub</a> |
+            <a href="https://play.google.com/store/apps/details?id=com.fm619.paperphoneplus" target="_blank" style="color: #07c160; margin: 0 15px;">Google Play</a>
+        </p>
     </footer>
-
-    <script>
-        const languages = {
-            zh: {
-                heroTitle: "PaperPhone Plus",
-                heroSubtitle: "微信风格 · React + Rust 重构<br>端到端加密 · 前向保密 · iOS 永久免签",
-                featuresTitle: "更安全 · 更丝滑 · 更强大",
-                features: [
-                    { icon: "🔐", title: "端对端加密", desc: "无状态 ECDH + XSalsa20-Poly1305，逐消息临时密钥，前向保密" },
-                    { icon: "🛡️", title: "抗量子加密", desc: "Rust 后端强化安全模型" },
-                    { icon: "📹", title: "视频语音通话", desc: "WebRTC P2P + Mesh，支持 Cloudflare TURN" },
-                    { icon: "👥", title: "群聊与朋友圈", desc: "2000 人群组 + 小红书风格时间线" },
-                    { icon: "⏱️", title: "消息自动删除", desc: "5 档可选，私聊双方可设置" },
-                    { icon: "📱", title: "iOS 永久免签", desc: "PWA 添加到主屏幕" },
-                    { icon: "🏷️", title: "好友标签", desc: "12 色标签系统 + 高级筛选" },
-                    { icon: "🔑", title: "两步验证 2FA", desc: "TOTP + 恢复码" }
-                ],
-                techTitle: "技术栈",
-                backendContent: `<ul class="list-disc pl-5 space-y-2"><li>Rust + Axum 0.8</li><li>Tokio 异步运行时</li><li>MySQL 8.0 + Redis</li><li>libsodium / 抗量子算法支持</li></ul>`,
-                frontendContent: `<ul class="list-disc pl-5 space-y-2"><li>React 19 + TypeScript</li><li>Tailwind CSS + shadcn/ui</li><li>WebRTC + libsodium-wrappers</li><li>PWA 支持</li></ul>`,
-                deployTitle: "部署方式",
-                deploySubtitle: "一键部署 · 前端支持 Vercel",
-                zeaburTitle: "Zeabur 一键云部署",
-                zeaburDesc: "无需服务器，几秒完成完整部署",
-                dockerTitle: "Docker Compose",
-                dockerDesc: "适合自有服务器",
-                dockerCode: `git clone https://github.com/619dev/Paperphone-plus.git\ncd Paperphone-plus\ndocker compose up -d`,
-                vercelTitle: "前端 Vercel 部署",
-                vercelDesc: "React 前端可独立部署到 Vercel",
-                screenshotsTitle: "界面预览",
-                screenshotsSubtitle: "全新 React UI · 更接近原生微信体验",
-                footerDesc: "React + Rust 重构的微信风格端对端加密即时通讯应用"
-            },
-            en: {
-                // English version (similar structure)
-                heroTitle: "PaperPhone Plus",
-                heroSubtitle: "WeChat-style · React + Rust Refactor<br>End-to-End Encrypted IM",
-                featuresTitle: "More Secure · Smoother · More Powerful",
-                // ... (add other translations as needed)
-            }
-        }
-
-        let currentLang = 'zh'
-
-        function renderFeatures(lang) {
-            const container = document.getElementById('features-grid')
-            container.innerHTML = ''
-            languages[lang].features.forEach(f => {
-                const card = document.createElement('div')
-                card.className = 'feature-card bg-white border border-zinc-200 rounded-3xl p-7'
-                card.innerHTML = `
-                    <div class="text-5xl mb-6">${f.icon}</div>
-                    <h4 class="text-xl font-semibold mb-3">${f.title}</h4>
-                    <p class="text-zinc-600">${f.desc}</p>
-                `
-                container.appendChild(card)
-            })
-        }
-
-        function switchLanguage(lang) {
-            currentLang = lang
-            const data = languages[lang]
-            
-            document.getElementById('lang-zh').classList.toggle('bg-emerald-600', lang === 'zh')
-            document.getElementById('lang-zh').classList.toggle('text-white', lang === 'zh')
-            document.getElementById('lang-en').classList.toggle('bg-emerald-600', lang === 'en')
-            document.getElementById('lang-en').classList.toggle('text-white', lang === 'en')
-            
-            // Update texts...
-            document.getElementById('hero-title').innerHTML = data.heroTitle
-            document.getElementById('hero-subtitle').innerHTML = data.heroSubtitle
-            document.getElementById('features-title').innerHTML = data.featuresTitle
-            // ... add more updates as needed
-            
-            renderFeatures(lang)
-        }
-
-        function navigateToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' })
-        }
-
-        window.onload = () => {
-            renderFeatures('zh')
-            console.log('%c✅ PaperPhone Plus 落地页生成完成！', 'color:#10b981; font-weight:bold')
-        }
-    </script>
 </body>
 </html>
