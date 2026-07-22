@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PaperPhone Plus | 端到端加密即时通讯</title>
-    <meta name="description" content="PaperPhone Plus 是一款微信风格的端到端加密即时通讯应用，React 19 + Rust Axum 重构，支持 PWA、原生移动端、桌面客户端、自托管部署与多通道推送。">
+    <title>PaperPhone Plus | 端到端加密通讯与百人视频会议</title>
+    <meta name="description" content="PaperPhone Plus 是一款可自托管的端到端加密即时通讯应用，现已支持基于 LiveKit SFU 的百人视频会议，并覆盖 PWA、原生移动端、桌面客户端与多通道推送。">
     <meta name="theme-color" content="#07110d">
     <meta property="og:title" content="PaperPhone Plus">
-    <meta property="og:description" content="微信风格 · 端到端加密 · React + Rust · 全平台即时通讯">
+    <meta property="og:description" content="微信风格 · 端到端加密 · 百人视频会议 · 全平台即时通讯">
     <meta property="og:image" content="https://raw.githubusercontent.com/619dev/Paperphone-plus/main/%E5%AE%A3%E4%BC%A0%E6%B5%B7%E6%8A%A5.png">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://raw.githubusercontent.com">
@@ -357,6 +357,132 @@
             line-height: 1.75;
         }
 
+        .meeting {
+            padding: 28px 24px 82px;
+        }
+
+        .meeting-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: 0.82fr 1.18fr;
+            gap: 34px;
+            max-width: 1132px;
+            margin: 0 auto;
+            padding: 52px;
+            overflow: hidden;
+            border-radius: 12px;
+            color: #fff;
+            background: #101714;
+            box-shadow: var(--shadow);
+        }
+
+        .meeting-card::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            right: -120px;
+            top: -220px;
+            border-radius: 50%;
+            background: rgba(7, 193, 96, 0.22);
+            filter: blur(12px);
+        }
+
+        .meeting-copy,
+        .meeting-stage {
+            position: relative;
+            z-index: 1;
+        }
+
+        .meeting-copy h2 {
+            margin-bottom: 20px;
+        }
+
+        .meeting-copy > p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+
+        .meeting-points {
+            display: grid;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .meeting-point {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.55;
+        }
+
+        .meeting-point i {
+            margin-top: 4px;
+            color: var(--green);
+        }
+
+        .meeting-stage {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            align-self: center;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .participant {
+            position: relative;
+            display: grid;
+            min-height: 155px;
+            place-items: center;
+            border-radius: 8px;
+            background: linear-gradient(145deg, #27332d, #17201c);
+        }
+
+        .participant:nth-child(2) { background: linear-gradient(145deg, #344541, #1b2825); }
+        .participant:nth-child(3) { background: linear-gradient(145deg, #3d332a, #241e19); }
+        .participant:nth-child(4) { background: linear-gradient(145deg, #2e2b42, #1d1b2b); }
+
+        .participant .avatar {
+            display: grid;
+            width: 62px;
+            height: 62px;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.13);
+            font-size: 1.28rem;
+            font-weight: 900;
+        }
+
+        .participant small {
+            position: absolute;
+            left: 12px;
+            bottom: 10px;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .meeting-toolbar {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 8px 0 2px;
+        }
+
+        .meeting-toolbar span {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .meeting-toolbar .hangup { background: var(--rose); }
+
         .showcase {
             background: #101714;
             color: #fff;
@@ -625,7 +751,8 @@
             .hero-stats,
             .feature-grid,
             .platforms,
-            .stack {
+            .stack,
+            .meeting-card {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
@@ -676,8 +803,21 @@
             .feature-grid,
             .platforms,
             .stack,
-            .client-grid {
+            .client-grid,
+            .meeting-card {
                 grid-template-columns: 1fr;
+            }
+
+            .meeting {
+                padding: 10px 18px 62px;
+            }
+
+            .meeting-card {
+                padding: 34px 22px;
+            }
+
+            .participant {
+                min-height: 116px;
             }
 
             .section {
@@ -733,6 +873,7 @@
         </a>
         <div class="nav-links">
             <a href="#features">特性</a>
+            <a href="#meeting">视频会议</a>
             <a href="#screenshots">预览</a>
             <a href="#deploy">部署</a>
             <a class="github-link" href="https://github.com/619dev/Paperphone-plus" target="_blank" rel="noopener">
@@ -753,7 +894,7 @@
                         微信风格 · 端到端加密 · React 19 + Rust Axum
                     </div>
                     <h1>PaperPhone Plus</h1>
-                    <p class="lead">一款可自托管的全平台即时通讯应用。无状态 ECDH + XSalsa20-Poly1305 逐消息加密，覆盖私聊、群聊、朋友圈、公开时间线、视频语音通话与离线推送。</p>
+                    <p class="lead">一款可自托管的全平台即时通讯应用。无状态 ECDH + XSalsa20-Poly1305 逐消息加密，现已加入基于 LiveKit SFU 的百人视频会议，覆盖私聊、群聊、社交动态与离线推送。</p>
                     <div class="hero-actions">
                         <a class="btn btn-primary" href="https://zeabur.com/templates/SK6T93?referralCode=619dev" target="_blank" rel="noopener">
                             <i class="fa-solid fa-rocket"></i> Zeabur 一键部署
@@ -766,7 +907,7 @@
                         </a>
                     </div>
                     <div class="hero-stats" aria-label="项目亮点">
-                        <div class="stat"><strong>2000</strong><span>人超大群聊，支持加密与未加密模式</span></div>
+                        <div class="stat"><strong>100 人</strong><span>LiveKit SFU 视频会议，支持动态订阅与编码</span></div>
                         <div class="stat"><strong>500MB</strong><span>单文件上传，支持 R2 或本地存储</span></div>
                         <div class="stat"><strong>5 通道</strong><span>Web Push、FCM、OneSignal、ntfy、APNS</span></div>
                         <div class="stat"><strong>8 语言</strong><span>中文、英文、日语、韩语、法语、德语、俄语、西班牙语</span></div>
@@ -803,7 +944,7 @@
                 <article class="feature">
                     <span class="icon rose"><i class="fa-solid fa-video"></i></span>
                     <h3>视频与语音通话</h3>
-                    <p>WebRTC P2P 与多人 Mesh，Cloudflare TURN 优先，Metered.ca 和公共 STUN 自动降级。</p>
+                    <p>私聊采用 WebRTC P2P；群组视频会议升级为 LiveKit SFU，支持最多 100 人在线并针对带宽动态优化。</p>
                 </article>
                 <article class="feature">
                     <span class="icon lavender"><i class="fa-solid fa-microphone-lines"></i></span>
@@ -835,6 +976,33 @@
                     <h3>管理与审核</h3>
                     <p>内嵌 Web 管理面板，支持举报审核、违规内容删除、用户封禁、路径自定义与密码保护。</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="meeting" id="meeting" aria-labelledby="meeting-title">
+            <div class="meeting-card">
+                <div class="meeting-copy">
+                    <p class="section-kicker">New · Video conference</p>
+                    <h2 id="meeting-title">从群聊，直接进入百人视频会议。</h2>
+                    <p>新版会议网络由 LiveKit SFU 承载，在保留 1 对 1 P2P 通话的同时，让多人音视频协作获得更稳定的上行带宽与更灵活的媒体订阅。</p>
+                    <div class="meeting-points">
+                        <div class="meeting-point"><i class="fa-solid fa-users-viewfinder"></i><span><strong>最多 100 人</strong><br>适合团队同步、线上课堂与社区活动。</span></div>
+                        <div class="meeting-point"><i class="fa-solid fa-sliders"></i><span><strong>主持人会控</strong><br>支持全员静音、管理成员麦克风与摄像头。</span></div>
+                        <div class="meeting-point"><i class="fa-solid fa-gauge-high"></i><span><strong>动态编码与订阅</strong><br>根据网络和画面状态优化传输，弱网下更从容。</span></div>
+                    </div>
+                </div>
+                <div class="meeting-stage" aria-label="四人视频会议界面示意">
+                    <div class="participant"><span class="avatar">林</span><small>林晓 · 主持人</small></div>
+                    <div class="participant"><span class="avatar">周</span><small>周宇</small></div>
+                    <div class="participant"><span class="avatar">陈</span><small>陈嘉</small></div>
+                    <div class="participant"><span class="avatar">+96</span><small>更多参会者</small></div>
+                    <div class="meeting-toolbar" aria-hidden="true">
+                        <span><i class="fa-solid fa-microphone"></i></span>
+                        <span><i class="fa-solid fa-video"></i></span>
+                        <span><i class="fa-solid fa-desktop"></i></span>
+                        <span class="hangup"><i class="fa-solid fa-phone-slash"></i></span>
+                    </div>
+                </div>
             </div>
         </section>
 
